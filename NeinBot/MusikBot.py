@@ -74,7 +74,7 @@ class Musikbot(commands.Cog):
             with yt_dl.YoutubeDL({'format': 'bestaudio'}) as ydl:
                 info = ydl.extract_info(self.queue[0], download=False)
                 URL = info['formats'][0]['url']
-                voice.play(discord.FFmpegPCMAudio(URL, executable="C:/Users/carlw/Downloads/ffmpeg-N-102642-g864d1ef2fc-win64-lgpl/ffmpeg-N-102642-g864d1ef2fc-win64-lgpl/bin/ffmpeg.exe"))
+                voice.play(discord.FFmpegPCMAudio(URL))
                 await ctx.send("Now playing %s" % info["title"])
                 del self.queue[0]
                 while voice.is_playing():

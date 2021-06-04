@@ -197,3 +197,8 @@ class Commands(commands.Cog):
         oracle_results = ["Ja", "Nein"]
         await ctx.send(random.choice(oracle_results))
         await log(ctx)
+
+    @commands.command()
+    async def lol(self, ctx):
+        await ctx.send("lolololol")
+        await log(ctx)
