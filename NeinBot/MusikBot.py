@@ -1,5 +1,4 @@
 import discord
-from discord.ext.commands.core import command
 import youtube_dl as yt_dl
 from discord.ext import commands
 from discord.utils import get

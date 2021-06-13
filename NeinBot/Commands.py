@@ -1,9 +1,8 @@
 import discord
 from discord.ext import commands
-import Logs
 import asyncio
 import random
-from Logs import log
+from Log import log
 
 
 class Commands(commands.Cog):
