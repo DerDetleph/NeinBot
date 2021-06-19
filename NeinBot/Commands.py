@@ -3,6 +3,7 @@ from discord.ext import commands
 import asyncio
 import random
 from Log import log
+from test import new_command
 
 
 class Commands(commands.Cog):
@@ -87,51 +88,19 @@ class Commands(commands.Cog):
 
     @commands.command()
     async def scheisse(self, ctx):
-        try:
-            channel = ctx.author.voice.channel
-            await channel.connect()
-            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
-            voice.play(discord.FFmpegPCMAudio("media/scheisse.mp3"))
-            while voice.is_playing():
-                await asyncio.sleep(1)
-            await asyncio.sleep(2)
-            await voice.disconnect()
-        except Exception as e:
-            print(e)
-            await ctx.send("**Noob.**")
-        finally:
-            await log(ctx)
+        await Commands.media_cmd(self, ctx, "scheisse")
 
     @commands.command()
     async def garnix(self, ctx):
-        try:
-            channel = ctx.author.voice.channel
-            await channel.connect()
-            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
-            voice.play(discord.FFmpegPCMAudio("media/garnix.mp3"))
-            while voice.is_playing():
-                await asyncio.sleep(1)
-            await asyncio.sleep(2)
-            await voice.disconnect()
-        except Exception as e:
-            print(e)
-            await ctx.send("**Noob.**")
-        finally:
-            await log(ctx)
+        await Commands.media_cmd(self, ctx, "garnix")
 
     @commands.command()
     async def walfleisch(self, ctx):
-        try:
-            channel = ctx.author.voice.channel
-            await channel.connect()
-            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
-            voice.play(discord.FFmpegPCMAudio("media/Walfleisch aus Island.mp3"))
-            while voice.is_playing():
-                await asyncio.sleep(1)
-            await asyncio.sleep(2)
-            await voice.disconnect()
-        finally:
-            await log(ctx)
+        await Commands.media_cmd(self, ctx, "Walfleisch aus Island")
+
+    @commands.command()
+    async def damage(self, ctx):
+        await Commands.media_cmd(self, ctx, "alotofdamage")
 
     @commands.command()
     async def ssp(self, ctx, arg: str):
@@ -201,3 +170,43 @@ class Commands(commands.Cog):
     async def lol(self, ctx):
         await ctx.send("lolololol")
         await log(ctx)
+
+    @staticmethod
+    async def media_cmd(self, ctx, media):
+        try:
+            channel = ctx.author.voice.channel
+            await channel.connect()
+            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+            voice.play(discord.FFmpegPCMAudio("NeinBot/media/%s.mp3" % media))
+            while voice.is_playing():
+                await asyncio.sleep(1)
+            await asyncio.sleep(2)
+            await voice.disconnect()
+        except Exception as e:
+            print(e)
+            await ctx.send("**Noob.**")
+        finally:
+            await log(ctx)
+
+    @commands.command()
+    async def msgCount(self, ctx):
+        channels = self.bot.get_all_channels()
+        sum = 0
+        for channel in channels:
+            if isinstance(channel, discord.TextChannel):
+                history = await channel.history(limit = None).flatten()
+                sum += len(history)
+        await ctx.send(sum)
+
+    @commands.command()
+    async def nick(self, ctx, member:discord.Member, nick:str):
+        await ctx.channel.purge(limit = 1)
+        await member.edit(nick = nick)
+
+    @new_command
+    async def testcmd(self, ctx):
+        await ctx.send("test")
+    
+    
+
+

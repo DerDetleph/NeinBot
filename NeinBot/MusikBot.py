@@ -67,7 +67,6 @@ class Musikbot(commands.Cog):
         self.queue.clear()
         ctx.send("Queue wurde geleert")
 
-    @staticmethod
     async def play_queue(self, ctx, voice):
         while len(self.queue) > 0:
             with yt_dl.YoutubeDL({'format': 'bestaudio'}) as ydl:

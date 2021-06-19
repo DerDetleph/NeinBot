@@ -15,7 +15,7 @@ class Events(commands.Cog):
         channel = self.bot.get_channel(796431059150700594)
         channelid = self.bot.get_channel(796431750657474632).mention
         userid = member.mention
-        await channel.send("Hi " + userid + ", bitte lies dir die Regeln in " + channelid + " durch!")
         guild = member.guild
         role = discord.utils.get(guild.roles, name="NeinBitteNicht")
+        await channel.send("Hi " + userid + ", bitte lies dir die Regeln in " + channelid + " durch!")
         await member.add_roles(role)

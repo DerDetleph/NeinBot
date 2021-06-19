@@ -14,7 +14,7 @@ class MessageManager(commands.Cog):
         elif "brokkoli" in msg.content.lower():
             await msg.delete()
 
-        if "hurensohn" in msg.content.lower():
+        elif "hurensohn" in msg.content.lower():
             await msg.channel.send("Nein DU!")
 
         elif msg.content.lower().startswith('ich bin'):
