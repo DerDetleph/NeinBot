@@ -3,67 +3,64 @@ from discord.ext import commands
 import asyncio
 import random
 from Log import log
-from test import new_command
 
 
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+    
+    def logged_command(cmd):
+        @commands.command(name = cmd.__name__)
+        async def newCommand(*args, **kwargs):
+            commands_instance = args[0]
+            ctx = args[1]
+            command_args = ctx.message.content.split(" ")[1:]
+            await cmd(commands_instance, ctx, *command_args)
+            await log(ctx)
+        return newCommand
 
-    @commands.command()
+    @logged_command
     async def hi(self, ctx):
         await ctx.send("**.__.**")
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def hilfe(self, ctx):
-        await ctx.send("Nutze \".hilfe\" wenn du ein Problem hast!\nUse \".help\" if you have a problem!")
-        await log(ctx)
+        await ctx.send("Nutze \".hilfe\", wenn du ein Problem hast!\nUse \".help\", if you have a problem!")
 
-    @commands.command()
+    @logged_command
     async def help(self, ctx):
-        await ctx.send("Use \".help\" if you have a problem!\nNutze \".hilfe\" wenn du ein Problem hast!")
-        await log(ctx)
+        await ctx.send("Use \".help\", if you have a problem!\nNutze \".hilfe\", wenn du ein Problem hast!")
 
-    @commands.command()
+    @logged_command
     async def ok(self, ctx):
         await ctx.send("||:ok_hand:||")
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def nein(self, ctx):
         await ctx.send("Oh NEIN!!! Das kommt nicht in die Tasche")
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def gtav(self, ctx):
         await ctx.send("||@everyone||\nGTA?")
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def ndo(self, ctx):
         await ctx.send("Nein!\nDoch!\nOh!")
-        await log(ctx)
 
-    @commands.command()
-    async def purge(self, ctx, arg=None):
-        if arg == None:
-            arg = 1
+    @logged_command
+    async def purge(self, ctx, arg:int = 1):
         if ctx.author.permissions_in(ctx.channel).manage_messages:
             count = int(arg) + 1
             await ctx.channel.purge(limit=count)
-            await log(ctx, arg)
         else:
             await ctx.channel.send("**Du hast nicht die Berechtigung für diese Aktion, du Gigaknecht.**")
-            await log(ctx, success=False)
 
-    @commands.command()
+    @commands.command
     async def dm(self, ctx, user: discord.Member, msg: str):
+        await ctx.channel.purge(limit=1)
         if ctx.author.permissions_in(ctx.channel).administrator:
             await user.send(msg)
-            await ctx.channel.purge(limit=1)
-        else:
-            await ctx.channel.purge(limit=1)
+        else:   
             await ctx.channel.send("**Du hast nicht die Berechtigung für diese Aktion, du Gigaknecht.**")
 
     @commands.command()
@@ -74,7 +71,7 @@ class Commands(commands.Cog):
             await log(ctx)
         else:
             await ctx.send("**Du hast nicht die Berechtigung für diese Aktion, du Gigaknecht.**")
-            await log(ctx, success=False)
+            await log(ctx)
 
     @commands.command()
     async def addrole(self, ctx, user: discord.Member, role: discord.Role):
@@ -84,25 +81,29 @@ class Commands(commands.Cog):
             await log(ctx)
         else:
             await ctx.send("**Du hast nicht die Berechtigung für diese Aktion, du Gigaknecht.**")
-            await log(ctx, success=False)
+            await log(ctx)
 
     @commands.command()
     async def scheisse(self, ctx):
         await Commands.media_cmd(self, ctx, "scheisse")
+        await log(ctx)
 
     @commands.command()
     async def garnix(self, ctx):
         await Commands.media_cmd(self, ctx, "garnix")
+        await log(ctx)
 
     @commands.command()
     async def walfleisch(self, ctx):
         await Commands.media_cmd(self, ctx, "Walfleisch aus Island")
+        await log(ctx)
 
     @commands.command()
     async def damage(self, ctx):
         await Commands.media_cmd(self, ctx, "alotofdamage")
+        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def ssp(self, ctx, arg: str):
         spielzuege = ["Schere", "Stein", "Papier"]
         spielzug = random.choice(spielzuege)
@@ -146,29 +147,21 @@ class Commands(commands.Cog):
         elif spielzug.lower() == "papier" and arg.lower() == "stein":
             await ctx.send("Papier.")
             await ctx.send("Papier gewinnt. " + random.choice(antworten_sieg))
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def rr(self, ctx):
         rr_results = ["Leben", "Leben", "Leben", "Leben", "Leben", "Tod"]
         await ctx.send(random.choice(rr_results))
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def coinflip(self, ctx):
         coin_results = ["Kopf", "Zahl"]
         await ctx.send(random.choice(coin_results))
-        await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def oracle(self, ctx):
         oracle_results = ["Ja", "Nein"]
         await ctx.send(random.choice(oracle_results))
-        await log(ctx)
-
-    @commands.command()
-    async def lol(self, ctx):
-        await ctx.send("lolololol")
         await log(ctx)
 
     @staticmethod
@@ -188,7 +181,7 @@ class Commands(commands.Cog):
         finally:
             await log(ctx)
 
-    @commands.command()
+    @logged_command
     async def msgCount(self, ctx):
         channels = self.bot.get_all_channels()
         sum = 0
@@ -202,11 +195,3 @@ class Commands(commands.Cog):
     async def nick(self, ctx, member:discord.Member, nick:str):
         await ctx.channel.purge(limit = 1)
         await member.edit(nick = nick)
-
-    @new_command
-    async def testcmd(self, ctx):
-        await ctx.send("test")
-    
-    
-
-

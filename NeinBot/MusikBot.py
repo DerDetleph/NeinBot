@@ -45,7 +45,7 @@ class Musikbot(commands.Cog):
         self.queue.append(url)
         if voice.is_playing():
             return
-        Musikbot.play_queue(self, ctx, voice)
+        await Musikbot.play_queue(self, ctx, voice)
 
     @commands.command()
     async def skip(self, ctx):
